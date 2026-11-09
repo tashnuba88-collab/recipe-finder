@@ -1,7 +1,7 @@
 import { Link, useParams } from "react-router-dom";
 import { Loading, ErrorMessage, Empty } from "../components/Status.jsx";
 import { useAsync } from "../hooks/useAsync.js";
-import { getMeal } from "../api/mealdb.js";
+import { getMeal, getIngredients } from "../api/mealdb.js";
 
 export default function Recipe() {
   const { id } = useParams();
@@ -18,6 +18,11 @@ export default function Recipe() {
     );
   }
 
+  const steps = meal.strInstructions
+    .split(/\r?\n/)
+    .map((s) => s.trim())
+    .filter(Boolean);
+
   return (
     <article>
       <Link to="/">← Back to search</Link>
@@ -26,6 +31,27 @@ export default function Recipe() {
         {meal.strCategory}, {meal.strArea}
       </p>
       <img src={meal.strMealThumb} alt={meal.strMeal} width="300" />
+      {meal.strYoutube && (
+        <p>
+          <a href={meal.strYoutube} target="_blank" rel="noreferrer">
+            Watch on YouTube
+          </a>
+        </p>
+      )}
+
+      <h2>Ingredients</h2>
+      <ul>
+        {getIngredients(meal).map(({ name, measure }) => (
+          <li key={name}>
+            {measure} {name}
+          </li>
+        ))}
+      </ul>
+
+      <h2>Method</h2>
+      {steps.map((step, i) => (
+        <p key={i}>{step}</p>
+      ))}
     </article>
   );
 }
