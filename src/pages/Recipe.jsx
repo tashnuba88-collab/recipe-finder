@@ -13,7 +13,7 @@ export default function Recipe() {
   if (status === "error") return <ErrorMessage error={error} />;
   if (!meal) {
     return (
-      <section>
+      <section className="page">
         <Empty>That recipe doesn’t exist.</Empty>
         <Link to="/">Back to search</Link>
       </section>
@@ -26,44 +26,53 @@ export default function Recipe() {
     .filter(Boolean);
 
   return (
-    <article>
-      <Link to="/">← Back to search</Link>
-      <h1>{meal.strMeal}</h1>
-      <p>
-        {meal.strCategory},{" "}
-        {meal.strArea === "Unknown" ? (
-          "cuisine unknown"
-        ) : (
-          <Link to={`/cuisine/${meal.strArea}`}>{meal.strArea} cuisine</Link>
-        )}
-      </p>
-      <img src={meal.strMealThumb} alt={meal.strMeal} width="300" />
-      <p>
-        <FavoriteButton meal={meal} />
-      </p>
-      {meal.strYoutube && (
-        <p>
-          <a href={meal.strYoutube} target="_blank" rel="noreferrer">
-            Watch on YouTube
-          </a>
-        </p>
-      )}
+    <article className="page recipe">
+      <Link to="/" className="back">
+        ← Back to search
+      </Link>
+      <div className="recipe-top">
+        <img src={meal.strMealThumb} alt={meal.strMeal} />
+        <div>
+          <h1>{meal.strMeal}</h1>
+          <p className="meta">
+            {meal.strCategory},{" "}
+            {meal.strArea === "Unknown" ? (
+              "cuisine unknown"
+            ) : (
+              <Link to={`/cuisine/${meal.strArea}`}>{meal.strArea} cuisine</Link>
+            )}
+          </p>
+          <FavoriteButton meal={meal} />
+          {meal.strYoutube && (
+            <p>
+              <a href={meal.strYoutube} target="_blank" rel="noreferrer">
+                Watch on YouTube
+              </a>
+            </p>
+          )}
+        </div>
+      </div>
 
       <CuisineCard area={meal.strArea} />
 
-      <h2>Ingredients</h2>
-      <ul>
-        {getIngredients(meal).map(({ name, measure }) => (
-          <li key={name}>
-            {measure} {name}
-          </li>
-        ))}
-      </ul>
-
-      <h2>Method</h2>
-      {steps.map((step, i) => (
-        <p key={i}>{step}</p>
-      ))}
+      <div className="recipe-body">
+        <section>
+          <h2>Ingredients</h2>
+          <ul className="ingredients">
+            {getIngredients(meal).map(({ name, measure }) => (
+              <li key={name}>
+                <span>{measure}</span> {name}
+              </li>
+            ))}
+          </ul>
+        </section>
+        <section>
+          <h2>Method</h2>
+          {steps.map((step, i) => (
+            <p key={i}>{step}</p>
+          ))}
+        </section>
+      </div>
     </article>
   );
 }
