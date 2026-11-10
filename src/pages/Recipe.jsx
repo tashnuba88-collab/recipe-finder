@@ -1,4 +1,6 @@
 import { Link, useParams } from "react-router-dom";
+import CuisineCard from "../components/CuisineCard.jsx";
+import FavoriteButton from "../components/FavoriteButton.jsx";
 import { Loading, ErrorMessage, Empty } from "../components/Status.jsx";
 import { useAsync } from "../hooks/useAsync.js";
 import { getMeal, getIngredients } from "../api/mealdb.js";
@@ -28,9 +30,17 @@ export default function Recipe() {
       <Link to="/">← Back to search</Link>
       <h1>{meal.strMeal}</h1>
       <p>
-        {meal.strCategory}, {meal.strArea}
+        {meal.strCategory},{" "}
+        {meal.strArea === "Unknown" ? (
+          "cuisine unknown"
+        ) : (
+          <Link to={`/cuisine/${meal.strArea}`}>{meal.strArea} cuisine</Link>
+        )}
       </p>
       <img src={meal.strMealThumb} alt={meal.strMeal} width="300" />
+      <p>
+        <FavoriteButton meal={meal} />
+      </p>
       {meal.strYoutube && (
         <p>
           <a href={meal.strYoutube} target="_blank" rel="noreferrer">
@@ -38,6 +48,8 @@ export default function Recipe() {
           </a>
         </p>
       )}
+
+      <CuisineCard area={meal.strArea} />
 
       <h2>Ingredients</h2>
       <ul>
