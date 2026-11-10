@@ -6,15 +6,27 @@ export default function Layout() {
 
   return (
     <>
-      <header>
-        <Link to="/">Pantry Search</Link>
-        <nav>
-          <NavLink to="/" end>Search</NavLink> <NavLink to="/favorites">Saved ({favorites.length})</NavLink>
+      <header className="site-header">
+        <Link to="/" className="wordmark">
+          Pantry Search
+        </Link>
+        <nav aria-label="Main">
+          <NavLink to="/" end>
+            Search
+          </NavLink>
+          <NavLink to="/favorites">Saved ({favorites.length})</NavLink>
         </nav>
       </header>
       <main>
         <Outlet />
       </main>
+      <footer className="site-footer">
+        Recipe data from{" "}
+        <a href="https://www.themealdb.com" target="_blank" rel="noreferrer">
+          TheMealDB
+        </a>
+        .
+      </footer>
     </>
   );
 }
